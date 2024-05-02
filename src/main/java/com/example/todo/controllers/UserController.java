@@ -22,12 +22,12 @@ public class UserController {
     @GetMapping("/user")
     public ResponseEntity<UserDto> getUser() {
         User user = userService.getAuthenticaticatedUser();
-        return ResponseEntity.ok(userMapper.toUserDto(user));
+        return ResponseEntity.ok(userMapper.toDto(user));
     }
 
     @PutMapping("/user")
     public ResponseEntity<UserDto> updateCategory(@RequestBody UserDto userDto) {
         User user = userService.updateAuthenticatedUser(userDto);
-        return ResponseEntity.ok().body(userMapper.toUserDto(user));
+        return ResponseEntity.ok().body(userMapper.toDto(user));
     }
 }

@@ -2,6 +2,8 @@ package com.example.todo.models;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -21,22 +23,23 @@ public class Todo {
     private String notes;
 
     @Column(name = "deadline")
-    private LocalDate deadline;
+    private LocalDate deadline = LocalDate.now();
 
     @Column(name = "priority")
-    private int priority;
+    private int priority = 0;
 
     @Column(name = "completed")
-    private boolean completed;
+    private boolean completed = false;
 
     @ManyToOne(cascade = CascadeType.REFRESH)
     @JoinColumn(name = "user_id")
     private User user;
 
     @ManyToOne(cascade = CascadeType.REFRESH)
-    @JoinColumn(name = "list_id")
-    private TodoList todoList;
+    @JoinColumn(name = "folder_id")
+    private Folder folder;
 
     @OneToMany(mappedBy = "todo", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Subtask> subtasks;
+
 }

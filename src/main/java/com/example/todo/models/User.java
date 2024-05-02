@@ -26,6 +26,6 @@ public class User {
     List<Todo> todos;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    List<TodoList> lists;
+    List<Folder> folders;
 
 }
