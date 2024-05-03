@@ -1,4 +1,4 @@
-package com.example.todo.mappers;
+package com.example.todo.dtos.mappers;
 
 import com.example.todo.dtos.UserDto;
 import com.example.todo.models.User;

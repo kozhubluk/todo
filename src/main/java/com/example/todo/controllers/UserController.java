@@ -1,7 +1,7 @@
 package com.example.todo.controllers;
 
 import com.example.todo.dtos.UserDto;
-import com.example.todo.mappers.UserMapper;
+import com.example.todo.dtos.mappers.UserMapper;
 import com.example.todo.models.User;
 import com.example.todo.services.UserService;
 import lombok.RequiredArgsConstructor;

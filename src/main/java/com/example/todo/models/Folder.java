@@ -7,7 +7,7 @@ import java.util.List;
 
 @Entity
 @Data
-@Table(name = "folder")
+@Table(name = "folders")
 public class Folder {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
