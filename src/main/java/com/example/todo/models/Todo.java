@@ -26,10 +26,10 @@ public class Todo {
     private LocalDate deadline = LocalDate.now();
 
     @Column(name = "priority")
-    private int priority = 0;
+    private Integer priority = 0;
 
     @Column(name = "completed")
-    private boolean completed = false;
+    private Boolean completed = false;
 
     @ManyToOne(cascade = CascadeType.REFRESH)
     @JoinColumn(name = "user_id")

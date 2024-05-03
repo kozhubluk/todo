@@ -11,6 +11,7 @@ public class TodoUpdateDto {
     private String title;
     private String notes;
     private LocalDate deadline;
-    private int priority;
-    private boolean completed;
+    private Integer priority;
+    private Boolean completed;
+    private Long folderId;
 }

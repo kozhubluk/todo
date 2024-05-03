@@ -11,6 +11,6 @@ import java.util.List;
 
 @Repository
 public interface FolderRepository extends JpaRepository<Folder, Long> {
-    @Query(value = "SELECT * FROM folders WHERE user_id = :userId ORDER BY deadline", nativeQuery = true)
+    @Query(value = "SELECT * FROM folders WHERE user_id = :userId", nativeQuery = true)
     List<Folder> findAllByUserId(@Param("userId") Long userId);
 }

@@ -1,7 +1,9 @@
 package com.example.todo.services;
 
 import com.example.todo.dtos.FolderDto;
+import com.example.todo.dtos.FolderUpdateDto;
 import com.example.todo.dtos.mappers.FolderMapper;
+import com.example.todo.dtos.mappers.FolderUpdateMapper;
 import com.example.todo.exceptions.FolderNotFoundException;
 import com.example.todo.models.Folder;
 import com.example.todo.models.User;
@@ -17,6 +19,7 @@ import java.util.List;
 public class FolderService {
     private final FolderRepository folderRepository;
     private final FolderMapper folderMapper;
+    private final FolderUpdateMapper folderUpdateMapper;
 
     public List<FolderDto> getAllFolders(Long userId) {
         List<Folder> folders = folderRepository.findAllByUserId(userId);
@@ -27,17 +30,17 @@ public class FolderService {
         return folderDtos;
     }
 
-    public FolderDto addNewFolder(User user, FolderDto folderDto) {
-        Folder folder = folderMapper.toEntity(folderDto);
+    public FolderDto addNewFolder(User user, FolderUpdateDto folderUpdateDto) {
+        Folder folder = folderUpdateMapper.toEntity(folderUpdateDto);
         folder.setUser(user);
         return folderMapper.toDto(folderRepository.save(folder));
     }
 
-    public FolderDto updateFolder(Long id, FolderDto folderDto) throws FolderNotFoundException {
+    public FolderDto updateFolder(Long id, FolderUpdateDto folderUpdateDto) throws FolderNotFoundException {
         Folder folder = folderRepository.findById(id).orElseThrow(() -> new FolderNotFoundException(
                 String.format("Папка '%s' не найдена", id)
         ));
-        Folder updatedFolder = folderMapper.toEntity(folderDto);
+        Folder updatedFolder = folderUpdateMapper.toEntity(folderUpdateDto);
         folder.setTitle(updatedFolder.getTitle());
         return folderMapper.toDto(folderRepository.save(folder));
     }

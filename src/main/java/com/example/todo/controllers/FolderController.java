@@ -1,6 +1,7 @@
 package com.example.todo.controllers;
 
 import com.example.todo.dtos.FolderDto;
+import com.example.todo.dtos.FolderUpdateDto;
 import com.example.todo.exceptions.FolderNotFoundException;
 import com.example.todo.models.User;
 import com.example.todo.services.FolderService;
@@ -26,15 +27,15 @@ public class FolderController {
     }
 
     @PostMapping
-    public ResponseEntity<FolderDto> addNewFolder(@RequestBody FolderDto folderDto) {
+    public ResponseEntity<FolderDto> addNewFolder(@RequestBody FolderUpdateDto folderUpdateDto) {
         User user = userService.getAuthenticaticatedUser();
-        return ResponseEntity.ok(folderService.addNewFolder(user, folderDto));
+        return ResponseEntity.ok(folderService.addNewFolder(user, folderUpdateDto));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> updateFolder(@PathVariable Long id, @RequestBody FolderDto folderDto) throws FolderNotFoundException {
+    public ResponseEntity<?> updateFolder(@PathVariable Long id, @RequestBody FolderUpdateDto folderUpdateDto) throws FolderNotFoundException {
         try {
-            return ResponseEntity.ok(folderService.updateFolder(id, folderDto));
+            return ResponseEntity.ok(folderService.updateFolder(id, folderUpdateDto));
         } catch (FolderNotFoundException e) {
             return new ResponseEntity<String>(e.getMessage(), HttpStatus.NOT_FOUND);
         }

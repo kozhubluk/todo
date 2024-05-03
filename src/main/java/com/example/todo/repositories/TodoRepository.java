@@ -13,11 +13,13 @@ import java.util.List;
 
 @Repository
 public interface TodoRepository extends JpaRepository<Todo, Long> {
-    @Query(value = "SELECT * FROM todos WHERE user_id = :userId" +
-            "AND (deadline >= :startDate OR cast(:startDate as date) IS NULL)" +
+    @Query(value = "SELECT * FROM todos WHERE user_id = :userId " +
+            "AND (deadline >= :startDate OR cast(:startDate as date) IS NULL) " +
             "AND (deadline <= :endDate OR cast(:endDate as date) IS NULL) " +
-            "AND (completed = :isCompleted OR :isCompleted IS NULL)" +
+            "AND (completed = :isCompleted OR :isCompleted IS NULL) " +
             "ORDER BY deadline", nativeQuery = true)
     List<Todo> findAllByUserId(@Param("userId") Long userId, @Param("startDate") LocalDate startDate, @Param("endDate") LocalDate endDate, @Param("isCompleted") Boolean completed);
 
+    @Query(value = "SELECT * FROM todos WHERE folder_id = :folderId", nativeQuery = true)
+    List<Todo> findAllByFolder(@Param("folderId") Long folderId);
 }
