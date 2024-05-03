@@ -45,7 +45,7 @@ public class TodoService {
         return todoMapper.toDto(todoRepository.save(todo));
     }
 
-    public TodoDto updateTodo(Long id, TodoUpdateDto todoUpdateDto) throws TodoNotFoundException {
+    public TodoDto updateTodo(Long id, TodoUpdateDto todoUpdateDto) throws TodoNotFoundException, FolderNotFoundException {
         Todo todo = todoRepository.findById(id).orElseThrow(() -> new TodoNotFoundException(
                 String.format("Задача '%s' не найдена", id)
         ));
@@ -54,7 +54,7 @@ public class TodoService {
         if (folderId != null) {
             todo.setFolder(null);
             if (folderId != -1) {
-                Folder folder = folderRepository.findById(todoUpdateDto.getFolderId()).orElseThrow(() -> new TodoNotFoundException(
+                Folder folder = folderRepository.findById(todoUpdateDto.getFolderId()).orElseThrow(() -> new FolderNotFoundException(
                         String.format("Папка '%s' не найдена", folderId)
                 ));
                 todo.setFolder(folder);

@@ -5,8 +5,7 @@ import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public class SubtaskDto {
-    private Long id;
+public class SubtaskUpdateDto {
     private String title;
     private Boolean completed;
     private Long todoId;

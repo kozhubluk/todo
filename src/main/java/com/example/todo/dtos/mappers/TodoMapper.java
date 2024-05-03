@@ -6,7 +6,6 @@ import com.example.todo.models.Todo;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
-
 @Mapper
 public interface TodoMapper {
     @Mapping(source = "todo.folder.id", target = "folderId")

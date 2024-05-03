@@ -15,7 +15,7 @@ public class Subtask {
     private String title;
 
     @Column(name = "completed")
-    private boolean completed;
+    private Boolean completed;
 
     @ManyToOne(cascade = CascadeType.REFRESH)
     @JoinColumn(name = "todo_id")

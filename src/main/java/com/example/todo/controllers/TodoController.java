@@ -2,6 +2,7 @@ package com.example.todo.controllers;
 
 import com.example.todo.dtos.TodoDto;
 import com.example.todo.dtos.TodoUpdateDto;
+import com.example.todo.exceptions.FolderNotFoundException;
 import com.example.todo.exceptions.TodoNotFoundException;
 import com.example.todo.models.User;
 import com.example.todo.services.TodoService;
@@ -42,10 +43,10 @@ public class TodoController {
     }
 
     @PutMapping("/todos/{id}")
-    public ResponseEntity<?> updateTodo(@PathVariable Long id, @RequestBody TodoUpdateDto todoUpdateDto) throws TodoNotFoundException {
+    public ResponseEntity<?> updateTodo(@PathVariable Long id, @RequestBody TodoUpdateDto todoUpdateDto) throws TodoNotFoundException, FolderNotFoundException {
         try {
             return ResponseEntity.ok(todoService.updateTodo(id, todoUpdateDto));
-        } catch ( TodoNotFoundException e) {
+        } catch ( TodoNotFoundException | FolderNotFoundException e) {
             return new ResponseEntity<String>(e.getMessage(), HttpStatus.NOT_FOUND);
         }
     }
