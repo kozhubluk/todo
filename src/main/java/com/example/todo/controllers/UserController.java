@@ -14,11 +14,6 @@ public class UserController {
     private final UserService userService;
     private final UserMapper userMapper;
 
-    @GetMapping("/secured")
-    public String securedData() {
-        return "Secured data";
-    }
-
     @GetMapping("/user")
     public ResponseEntity<UserDto> getUser() {
         User user = userService.getAuthenticaticatedUser();
