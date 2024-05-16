@@ -26,6 +26,12 @@ public class FolderController {
         return ResponseEntity.ok(folderService.getAllFolders(userId));
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<FolderDto> getFolder(@PathVariable Long id) throws FolderNotFoundException {
+        Long userId = userService.getAuthenticaticatedUser().getId();
+        return ResponseEntity.ok(folderService.getFolder(id, userId));
+    }
+
     @PostMapping
     public ResponseEntity<FolderDto> addNewFolder(@RequestBody FolderUpdateDto folderUpdateDto) {
         User user = userService.getAuthenticaticatedUser();
@@ -35,7 +41,8 @@ public class FolderController {
     @PutMapping("/{id}")
     public ResponseEntity<?> updateFolder(@PathVariable Long id, @RequestBody FolderUpdateDto folderUpdateDto) throws FolderNotFoundException {
         try {
-            return ResponseEntity.ok(folderService.updateFolder(id, folderUpdateDto));
+            Long userId = userService.getAuthenticaticatedUser().getId();
+            return ResponseEntity.ok(folderService.updateFolder(id, userId, folderUpdateDto));
         } catch (FolderNotFoundException e) {
             return new ResponseEntity<String>(e.getMessage(), HttpStatus.NOT_FOUND);
         }
@@ -44,7 +51,8 @@ public class FolderController {
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteFolder(@PathVariable Long id) throws FolderNotFoundException {
         try {
-            folderService.deleteFolder(id);
+            Long userId = userService.getAuthenticaticatedUser().getId();
+            folderService.deleteFolder(id, userId);
             return ResponseEntity.ok("Папка удалена");
         } catch (FolderNotFoundException e) {
             return new ResponseEntity<String>(e.getMessage(), HttpStatus.NOT_FOUND);

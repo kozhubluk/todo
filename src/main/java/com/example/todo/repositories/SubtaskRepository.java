@@ -12,6 +12,6 @@ import java.util.List;
 
 @Repository
 public interface SubtaskRepository extends JpaRepository<Subtask, Long> {
-    @Query(value = "SELECT * FROM subtasks WHERE todo_id = :todoId", nativeQuery = true)
+    @Query(value = "SELECT * FROM subtasks WHERE todo_id = :todoId ORDER BY id", nativeQuery = true)
     List<Subtask> getAllSubtasksByTodo(@Param("todoId") Long todoId);
 }

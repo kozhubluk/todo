@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 import java.util.List;
 
@@ -19,7 +20,7 @@ public class SubtaskController {
     private final SubtaskService subtaskService;
 
     @GetMapping("/{todoId}/subtasks")
-    public ResponseEntity<List<SubtaskDto>> getAllSubtasksByTodo(@PathVariable Long todoId) {
+    public ResponseEntity<?> getAllSubtasksByTodo(@PathVariable Long todoId) {
         return ResponseEntity.ok(subtaskService.getAllSubtasksByTodo(todoId));
     }
 
@@ -42,7 +43,7 @@ public class SubtaskController {
     }
 
     @DeleteMapping("/subtasks/{id}")
-    public ResponseEntity<String> deleteTodo(@PathVariable Long id) {
+    public ResponseEntity<String> deleteSubtask(@PathVariable Long id) {
         try {
             subtaskService.deleteSubtask(id);
             return ResponseEntity.ok("Подзадача удалена");

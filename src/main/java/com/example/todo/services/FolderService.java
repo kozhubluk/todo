@@ -30,25 +30,26 @@ public class FolderService {
         return folderDtos;
     }
 
+    public FolderDto getFolder(Long id, Long userId) throws FolderNotFoundException {
+        Folder folder = folderRepository.findByIdAndUserId(id, userId).orElseThrow(() -> new FolderNotFoundException(String.format("Папка '%s' не найдена", id)));
+        return folderMapper.toDto(folder);
+    }
+
     public FolderDto addNewFolder(User user, FolderUpdateDto folderUpdateDto) {
         Folder folder = folderUpdateMapper.toEntity(folderUpdateDto);
         folder.setUser(user);
         return folderMapper.toDto(folderRepository.save(folder));
     }
 
-    public FolderDto updateFolder(Long id, FolderUpdateDto folderUpdateDto) throws FolderNotFoundException {
-        Folder folder = folderRepository.findById(id).orElseThrow(() -> new FolderNotFoundException(
-                String.format("Папка '%s' не найдена", id)
-        ));
+    public FolderDto updateFolder(Long id, Long userId, FolderUpdateDto folderUpdateDto) throws FolderNotFoundException {
+        Folder folder = folderRepository.findByIdAndUserId(id, userId).orElseThrow(() -> new FolderNotFoundException(String.format("Папка '%s' не найдена", id)));
         Folder updatedFolder = folderUpdateMapper.toEntity(folderUpdateDto);
         folder.setTitle(updatedFolder.getTitle());
         return folderMapper.toDto(folderRepository.save(folder));
     }
 
-    public void deleteFolder(Long id) throws FolderNotFoundException {
-        Folder folder = folderRepository.findById(id).orElseThrow(() -> new FolderNotFoundException(
-                String.format("Папка '%s' не найдена", id)
-        ));
+    public void deleteFolder(Long id, Long userId) throws FolderNotFoundException {
+        Folder folder = folderRepository.findByIdAndUserId(id, userId).orElseThrow(() -> new FolderNotFoundException(String.format("Папка '%s' не найдена", id)));
         folderRepository.deleteById(id);
     }
 }

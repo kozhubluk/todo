@@ -12,6 +12,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -23,39 +24,59 @@ public class TodoController {
     private final UserService userService;
 
     @GetMapping("/todos")
-    public ResponseEntity<List<TodoDto>> getAllTodos(@RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)  LocalDate startDate,
-                                                     @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)  LocalDate endDate,
+    public ResponseEntity<List<TodoDto>> getAllTodos(@RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
+                                                     @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate,
                                                      @RequestParam(required = false) Boolean completed) {
         Long userId = userService.getAuthenticaticatedUser().getId();
         return ResponseEntity.ok(todoService.getAllTodos(userId, startDate, endDate, completed));
     }
 
-    @GetMapping("/{folderId}/todos")
-    public ResponseEntity<List<TodoDto>> getAllTodosByFolder(@PathVariable Long folderId) {
-        User user = userService.getAuthenticaticatedUser();
-        return ResponseEntity.ok(todoService.getAllTodosByFolder(user, folderId));
-    }
-
-    @PostMapping("/todos")
-    public ResponseEntity<TodoDto> addNewTodo(@RequestBody TodoUpdateDto todoUpdateDto) {
-        User user = userService.getAuthenticaticatedUser();
-        return ResponseEntity.ok(todoService.addNewTodo(user, todoUpdateDto));
-    }
-
-    @PutMapping("/todos/{id}")
-    public ResponseEntity<?> updateTodo(@PathVariable Long id, @RequestBody TodoUpdateDto todoUpdateDto) throws TodoNotFoundException, FolderNotFoundException {
+    @GetMapping("/todos/{id}")
+    public ResponseEntity<?> getTodo(@PathVariable Long id) {
         try {
-            return ResponseEntity.ok(todoService.updateTodo(id, todoUpdateDto));
-        } catch ( TodoNotFoundException | FolderNotFoundException e) {
+            Long userId = userService.getAuthenticaticatedUser().getId();
+            return ResponseEntity.ok(todoService.getTodo(id, userId));
+        } catch (TodoNotFoundException e) {
             return new ResponseEntity<String>(e.getMessage(), HttpStatus.NOT_FOUND);
         }
     }
 
-    @DeleteMapping("/to/{id}")
+    @GetMapping("/{folderId}/todos")
+    public ResponseEntity<?> getAllTodosByFolder(@PathVariable Long folderId) {
+        try {
+            User user = userService.getAuthenticaticatedUser();
+            return ResponseEntity.ok(todoService.getAllTodosByFolder(user, folderId));
+        } catch (MethodArgumentTypeMismatchException e) {
+            return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @PostMapping("/todos")
+    public ResponseEntity<?> addNewTodo(@RequestBody TodoUpdateDto todoUpdateDto) {
+        try {
+            User user = userService.getAuthenticaticatedUser();
+            return ResponseEntity.ok(todoService.addNewTodo(user, todoUpdateDto));
+        } catch (FolderNotFoundException e) {
+            return new ResponseEntity<String>(e.getMessage(), HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @PutMapping("/todos/{id}")
+    public ResponseEntity<?> updateTodo(@PathVariable Long id, @RequestBody TodoUpdateDto todoUpdateDto) {
+        try {
+            Long userId = userService.getAuthenticaticatedUser().getId();
+            return ResponseEntity.ok(todoService.updateTodo(id, userId, todoUpdateDto));
+        } catch (TodoNotFoundException | FolderNotFoundException e) {
+            return new ResponseEntity<String>(e.getMessage(), HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @DeleteMapping("/todos/{id}")
     public ResponseEntity<String> deleteTodo(@PathVariable Long id) throws TodoNotFoundException {
         try {
-            todoService.deleteTodo(id);
-            return ResponseEntity.ok("Задача удалена");
+            Long userId = userService.getAuthenticaticatedUser().getId();
+            todoService.deleteTodo(id, userId);
+            return new ResponseEntity<String>("Задача успешно удалена", HttpStatus.OK);
         } catch (TodoNotFoundException e) {
             return new ResponseEntity<String>(e.getMessage(), HttpStatus.NOT_FOUND);
         }
